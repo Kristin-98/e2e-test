@@ -2,14 +2,16 @@ import { spawn } from "child_process";
 import { defineConfig } from "cypress";
 import { MongoMemoryReplSet } from "mongodb-memory-server";
 import waitOn from "wait-on";
+
 import { seedTodos } from "./prisma/seed/todo";
 
 export default defineConfig({
   e2e: {
-    async setupNodeEvents(on, config) {
+    baseUrl: "http://localhost:3100",
+    async setupNodeEvents(on) {
       // 1. Skapa in-memory db replica
-      const db = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
-      const dbUri = db.getUri("cypress-test");
+      const mongo = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
+      const dbUri = mongo.getUri("cypress-test");
 
       // 2. Starta Next.js servern annan port. ansluter till 1.
       const server = spawn(
@@ -27,9 +29,17 @@ export default defineConfig({
       await waitOn({ resources: ["http://localhost:3100"], timeout: 60_000 });
 
       // 4. Städa upp processerna mongo db och next.js servern
+      const cleanup = async () => {
+        server.kill();
+        await mongo.stop();
+      };
+      process.on("exit", cleanup);
+
       // 5. Reseeda om databsen så att testerna blir oberoende av varandra
+      process.env.DATABASE_URL = dbUri;
       on("task", {
         async reseed() {
+          const { db } = await import("./prisma/db");
           await db.todo.deleteMany();
           await seedTodos();
 
