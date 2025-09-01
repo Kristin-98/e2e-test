@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 interface WeatherData {
   city: string;
@@ -12,6 +13,13 @@ export default function WeatherApp() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const favoriteCity = Cookies.get("favoriteCity");
+    if (favoriteCity) {
+      fetchWeather(favoriteCity);
+    }
+  }, []);
 
   async function fetchWeather(searchCity: string) {
     try {
@@ -26,6 +34,12 @@ export default function WeatherApp() {
     } catch (err) {
       setWeather(null);
       setError((err as Error).message);
+    }
+  }
+  function handleSaveFavorite() {
+    if (weather) {
+      Cookies.set("favoriteCity", weather.city);
+      alert(`${weather.city} sparad som favoritstad!`);
     }
   }
 
@@ -45,6 +59,7 @@ export default function WeatherApp() {
           <h2>{weather.city}</h2>
           <p>{weather.temperature}°C</p>
           <p>{weather.description}</p>
+          <button onClick={handleSaveFavorite}>Spara som favorit</button>
         </div>
       )}
     </div>
