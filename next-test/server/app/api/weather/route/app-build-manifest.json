@@ -1,0 +1,15 @@
+{
+  "pages": {
+    "/api/weather/route": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_37181c43._.js",
+      "static/chunks/cf46a_next_dist_compiled_react-dom_c457170e._.js",
+      "static/chunks/cf46a_next_dist_compiled_next-devtools_index_b21959d0.js",
+      "static/chunks/cf46a_next_dist_compiled_e4566c41._.js",
+      "static/chunks/cf46a_next_dist_client_393af294._.js",
+      "static/chunks/cf46a_next_dist_f9b50a20._.js",
+      "static/chunks/cf46a_@swc_helpers_cjs_7cbdd5f9._.js",
+      "static/chunks/e2e-test_a0ff3932._.js",
+      "static/chunks/turbopack-e2e-test_74d285b0._.js"
+    ]
+  }
+}

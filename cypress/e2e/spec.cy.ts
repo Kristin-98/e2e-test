@@ -46,6 +46,7 @@ describe("todo", () => {
     cy.get("input[placeholder='Ange stad']").type("FakeCity");
     cy.get("button").contains("Sök").click();
 
+    //döp om för att få grönt test
     cy.contains("Kunde inte hitta väder för FakeCity");
   });
 

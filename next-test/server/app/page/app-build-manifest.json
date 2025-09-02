@@ -1,0 +1,22 @@
+{
+  "pages": {
+    "/page": [
+      "static/chunks/cf46a_next_dist_af4c9f79._.js",
+      "static/chunks/e2e-test_app_favicon_ico_mjs_0328e610._.js",
+      "static/chunks/[root-of-the-server]__3affde25._.css",
+      "static/chunks/e2e-test_app_layout_tsx_9715c74a._.js",
+      "static/chunks/cf46a_next_dist_client_components_builtin_global-error_b60e1bab.js",
+      "static/chunks/e2e-test_dfac1854._.js",
+      "static/chunks/e2e-test_app_page_tsx_b60e1bab._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_37181c43._.js",
+      "static/chunks/cf46a_next_dist_compiled_react-dom_c457170e._.js",
+      "static/chunks/cf46a_next_dist_compiled_next-devtools_index_b21959d0.js",
+      "static/chunks/cf46a_next_dist_compiled_e4566c41._.js",
+      "static/chunks/cf46a_next_dist_client_393af294._.js",
+      "static/chunks/cf46a_next_dist_f9b50a20._.js",
+      "static/chunks/cf46a_@swc_helpers_cjs_7cbdd5f9._.js",
+      "static/chunks/e2e-test_a0ff3932._.js",
+      "static/chunks/turbopack-e2e-test_74d285b0._.js"
+    ]
+  }
+}
