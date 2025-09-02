@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface WeatherData {
   city: string;
   temperature: number;
   description: string;
+  icon: string;
 }
 
 export default function WeatherApp() {
@@ -24,7 +26,6 @@ export default function WeatherApp() {
   async function fetchWeather(searchCity: string) {
     try {
       setError(null);
-      // Ändra till mitt api
       const res = await fetch(`/api/weather?city=${searchCity}`);
       if (!res.ok) {
         throw new Error("Stad hittades inte");
@@ -44,24 +45,61 @@ export default function WeatherApp() {
   }
 
   return (
-    <div>
-      <input
-        placeholder="Ange stad"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
-      <button onClick={() => fetchWeather(city)}>Sök</button>
+    <div
+      className="flex items-center justify-center min-h-screen p-4 bg-cover bg-center"
+      style={{ backgroundImage: "url('/clouds.jpg')" }}
+    >
+      <div className="w-full max-w-md rounded-2xl bg-white/20 backdrop-blur-xl shadow-lg p-6 text-center text-black">
+        <h1 className="text-2xl font-bold mb-4">🌤️ Väder</h1>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            fetchWeather(city);
+          }}
+          className="flex gap-2 mb-6"
+        >
+          <input
+            placeholder="Ange stad"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="flex-1 px-4 py-2 rounded-lg bg-white/30 text-black placeholder-black/70 "
+          />
+          <button
+            type="submit"
+            onClick={() => fetchWeather(city)}
+            className="px-4 py-2 rounded-lg bg-yellow-400/90 hover:bg-yellow-500 text-black font-semibold shadow-md transition"
+          >
+            Sök
+          </button>
+        </form>
 
-      {weather && (
-        <div>
-          <h2>{weather.city}</h2>
-          <p>{weather.temperature}°C</p>
-          <p>{weather.description}</p>
-          <button onClick={handleSaveFavorite}>Spara som favorit</button>
-        </div>
-      )}
+        {error && <p className="text-red-300 mb-4">{error}</p>}
+
+        {weather && (
+          <div className="space-y-3">
+            <h2 className="text-xl font-bold">{weather.city}</h2>
+            <Image
+              src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+              alt={weather.description}
+              width={100}
+              height={100}
+              className="mx-auto"
+            />
+            <p className="text-4xl font-semibold">{weather.temperature}°C</p>
+            <p className="italic">{weather.description}</p>
+
+            <button
+              onClick={handleSaveFavorite}
+              className="mt-4 px-4 py-2 rounded-lg"
+            >
+              Spara som favorit
+            </button>
+
+            <h3>Mina favoritstäder</h3>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

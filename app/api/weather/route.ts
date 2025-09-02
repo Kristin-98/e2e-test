@@ -30,8 +30,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       city: data.name,
-      temperature: data.main.temp,
+      temperature: Math.round(data.main.temp),
       description: data.weather[0].description,
+      icon: data.weather[0].icon,
     });
   } catch (err) {
     return NextResponse.json(

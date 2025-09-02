@@ -8,4 +8,16 @@ const nextConfig: NextConfig = {
   },
 };
 
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "openweathermap.org",
+        pathname: "/img/wn/**",
+      },
+    ],
+  },
+};
+
 export default nextConfig;
