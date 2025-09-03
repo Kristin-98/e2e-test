@@ -1,8 +1,8 @@
 import { db } from "../db";
-import { seedTodos } from "./todo";
+import { seedFavorites } from "./todo";
 
 async function main() {
-  await seedTodos();
+  await seedFavorites();
 }
 
 main()

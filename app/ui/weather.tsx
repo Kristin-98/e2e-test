@@ -1,6 +1,5 @@
 "use client";
 
-import Cookies from "js-cookie";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Favorites from "./favorites";
@@ -18,18 +17,21 @@ export default function WeatherApp() {
   const [error, setError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<WeatherData[]>([]);
 
-  useEffect(() => {
-  const stored = Cookies.get("favoriteCities");
-  if (stored) {
+  async function loadFavorites() {
     try {
-      const parsed: WeatherData[] = JSON.parse(stored);
-      setFavorites(parsed);
-    } catch {
-      setFavorites([]);
+      const res = await fetch("/api/favorites");
+      if (res.ok) {
+        const data: WeatherData[] = await res.json();
+        setFavorites(data);
+      }
+    } catch (err) {
+      console.error("Kunde inte hämta favoriter", err);
     }
   }
-}, []);
 
+  useEffect(() => {
+    loadFavorites();
+  }, []);
 
   async function fetchWeather(searchCity: string) {
     try {
@@ -46,23 +48,35 @@ export default function WeatherApp() {
     }
   }
 
-  function handleSaveFavorite() {
-    if (weather) {
-      if (favorites.some((fav) => fav.city === weather.city)) {
-        alert(`${weather.city} finns redan bland favoriter!`);
-        return;
-      }
+  async function handleSaveFavorite() {
+    if (!weather) return;
+    if (favorites.some((fav) => fav.city === weather.city)) {
+      alert(`${weather.city} finns redan bland favoriter!`);
+      return;
+    }
 
-      const updated = [...favorites, weather];
-      setFavorites(updated);
-      Cookies.set("favoriteCity", JSON.stringify(updated));
+    try {
+      const res = await fetch("/api/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(weather),
+      });
+      if (res.ok) setFavorites((prev) => [...prev, weather]);
+    } catch (err) {
+      console.error("Kunde inte spara favorit", err);
     }
   }
 
-  function handleRemoveFavorite(city: string) {
-    const updated = favorites.filter((fav) => fav.city !== city);
-    setFavorites(updated);
-    Cookies.set("favoriteCities", JSON.stringify(updated));
+  async function handleRemoveFavorite(city: string) {
+    try {
+      const res = await fetch(`/api/favorites?city=${city}`, {
+        method: "DELETE",
+      });
+      if (res.ok)
+        setFavorites((prev) => prev.filter((fav) => fav.city !== city));
+    } catch (err) {
+      console.error("Kunde inte ta bort favorit", err);
+    }
   }
 
   return (

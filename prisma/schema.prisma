@@ -18,3 +18,12 @@ model Todo {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   text String
 }
+
+model FavoriteCity {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  city  String @unique
+  temperature Int
+  description String
+  icon String
+  createdAt DateTime @default(now())
+}
