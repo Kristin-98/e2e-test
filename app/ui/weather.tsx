@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Activity from "./activity";
 import Favorites from "./favorites";
 
 interface WeatherData {
@@ -132,8 +133,11 @@ export default function WeatherApp() {
             </button>
           </div>
         )}
+        <div>
+          <Activity />
+        </div>
       </div>
-      <div className="mt-6 w-full max-w-md">
+      <div className="mt-6 w-full max-w-md z-10">
         <Favorites favorites={favorites} onRemove={handleRemoveFavorite} />
       </div>
     </div>
