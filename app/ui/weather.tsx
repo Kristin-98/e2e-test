@@ -19,11 +19,17 @@ export default function WeatherApp() {
   const [favorites, setFavorites] = useState<WeatherData[]>([]);
 
   useEffect(() => {
-    const favoriteCity = Cookies.get("favoriteCity");
-    if (favoriteCity) {
-      fetchWeather(favoriteCity);
+  const stored = Cookies.get("favoriteCities");
+  if (stored) {
+    try {
+      const parsed: WeatherData[] = JSON.parse(stored);
+      setFavorites(parsed);
+    } catch {
+      setFavorites([]);
     }
-  }, []);
+  }
+}, []);
+
 
   async function fetchWeather(searchCity: string) {
     try {
@@ -49,7 +55,7 @@ export default function WeatherApp() {
 
       const updated = [...favorites, weather];
       setFavorites(updated);
-      Cookies.set("favoriteCity", weather.city);
+      Cookies.set("favoriteCity", JSON.stringify(updated));
     }
   }
 
@@ -106,7 +112,7 @@ export default function WeatherApp() {
 
             <button
               onClick={handleSaveFavorite}
-              className="mt-4 px-4 py-2 rounded-lg"
+              className="mt-4 px-4 py-2 rounded-lg border-1 border-yellow-400 hover:border-yellow-500"
             >
               Spara som favorit
             </button>

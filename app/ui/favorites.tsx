@@ -17,7 +17,7 @@ export default function Favorites({ favorites, onRemove }: FavoritesProps) {
   if (favorites.length === 0) return null;
   return (
     <div className="max-w-5xl mt-6">
-      <h3 className="text-1xl mb-4 text-center">Mina favoriter</h3>
+      <h3 className="text-2xl mb-4 text-center text-black">Mina favoriter</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {favorites.map((fav) => (
           <div
