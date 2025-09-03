@@ -3,6 +3,7 @@
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Favorites from "./favorites";
 
 interface WeatherData {
   city: string;
@@ -15,6 +16,7 @@ export default function WeatherApp() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<WeatherData[]>([]);
 
   useEffect(() => {
     const favoriteCity = Cookies.get("favoriteCity");
@@ -37,11 +39,24 @@ export default function WeatherApp() {
       setError((err as Error).message);
     }
   }
+
   function handleSaveFavorite() {
     if (weather) {
-      Cookies.set("favoriteCity", weather.city);
-      alert(`${weather.city} sparad som favoritstad!`);
+      if (favorites.some((fav) => fav.city === weather.city)) {
+        alert(`${weather.city} finns redan bland favoriter!`);
+        return;
+      }
+
+      const updated = [...favorites, weather];
+      setFavorites(updated);
+      Cookies.set("favoriteCity", JSON.stringify(updated));
     }
+  }
+
+  function handleRemoveFavorite(city: string) {
+    const updated = favorites.filter((fav) => fav.city !== city);
+    setFavorites(updated);
+    Cookies.set("favoriteCities", JSON.stringify(updated));
   }
 
   return (
@@ -95,11 +110,10 @@ export default function WeatherApp() {
             >
               Spara som favorit
             </button>
-
-            <h3>Mina favoritstäder</h3>
           </div>
         )}
       </div>
+      <Favorites favorites={favorites} onRemove={handleRemoveFavorite} />
     </div>
   );
 }
