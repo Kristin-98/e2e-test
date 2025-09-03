@@ -61,7 +61,7 @@ export default function WeatherApp() {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen p-4 bg-cover bg-center"
+      className="flex flex-col items-center justify-center min-h-screen p-4 bg-cover bg-center"
       style={{ backgroundImage: "url('/clouds.jpg')" }}
     >
       <div className="w-full max-w-md rounded-2xl bg-white/20 backdrop-blur-xl shadow-lg p-6 text-center text-black">
@@ -113,7 +113,9 @@ export default function WeatherApp() {
           </div>
         )}
       </div>
-      <Favorites favorites={favorites} onRemove={handleRemoveFavorite} />
+      <div className="mt-6 w-full max-w-md">
+        <Favorites favorites={favorites} onRemove={handleRemoveFavorite} />
+      </div>
     </div>
   );
 }
