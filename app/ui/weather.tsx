@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Activity from "./activity";
+import ActivityDropdown from "./activity";
 import Favorites from "./favorites";
 
 interface WeatherData {
@@ -134,7 +134,7 @@ export default function WeatherApp() {
           </div>
         )}
         <div>
-          <Activity />
+          <ActivityDropdown weatherDescription={weather?.description} />
         </div>
       </div>
       <div className="mt-6 w-full max-w-md z-10">
