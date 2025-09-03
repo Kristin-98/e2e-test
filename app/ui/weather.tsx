@@ -30,7 +30,7 @@ export default function WeatherApp() {
       setError(null);
       const res = await fetch(`/api/weather?city=${searchCity}`);
       if (!res.ok) {
-        throw new Error("Stad hittades inte");
+        throw new Error(`Kunde inte hitta väder för ${searchCity}`);
       }
       const data: WeatherData = await res.json();
       setWeather(data);
@@ -49,7 +49,7 @@ export default function WeatherApp() {
 
       const updated = [...favorites, weather];
       setFavorites(updated);
-      Cookies.set("favoriteCity", JSON.stringify(updated));
+      Cookies.set("favoriteCity", weather.city);
     }
   }
 

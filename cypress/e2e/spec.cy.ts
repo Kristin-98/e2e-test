@@ -1,6 +1,9 @@
 describe("todo", () => {
   beforeEach(() => {
     cy.task("reseed");
+    cy.clearCookies();
+    cy.intercept("GET", "/api/weather*").as("getWeather");
+    cy.visit("/");
   });
   it("should display three todos by default", () => {
     cy.visit("/");
@@ -16,75 +19,79 @@ describe("todo", () => {
     cy.contains("Feed the cat").should("not.exist");
   });
 
-  it("should be able to search for a city and display weather", () => {
-    cy.intercept("GET", "/weather?city=Stockholm", {
+  it("should display weather when a valid city is searched", () => {
+    cy.intercept("GET", "api/weather?city=Stockholm*", {
       statusCode: 200,
       body: {
         city: "Stockholm",
         temperature: 7,
         description: "clear sky",
+        icon: "01d",
       },
-    }).as("getWeather");
+    }).as("getWeatherStockholm");
 
-    cy.visit("/");
     cy.get("input[placeholder='Ange stad']").type("Stockholm");
     cy.get("button").contains("Sök").click();
 
-    cy.wait("@getWeather");
+    cy.wait("@getWeatherStockholm");
     cy.contains("Stockholm");
     cy.contains("7°C");
     cy.contains("clear sky");
   });
 
-  it("should show errormessage if you type invalid city", () => {
-    cy.intercept("GET", "/weather?city=FakeCity", {
+  it("should show error message for invalid city", () => {
+    cy.intercept("GET", "api/weather?city=FakeCity*", {
       statusCode: 404,
       body: { error: "City not found" },
-    });
+    }).as("getWeatherFakeCity");
 
-    cy.visit("/");
     cy.get("input[placeholder='Ange stad']").type("FakeCity");
     cy.get("button").contains("Sök").click();
 
-    //döp om för att få grönt test
+    cy.wait("@getWeatherFakeCity");
     cy.contains("Kunde inte hitta väder för FakeCity");
   });
 
-  it("should show weather for favoritecity via cookie", () => {
+  it("should show weather for favorite city via cookie", () => {
     cy.setCookie("favoriteCity", "Göteborg");
 
-    cy.intercept("GET", "/weather?city=Göteborg", {
+    cy.intercept("GET", "/api/weather?city=G*", {
       statusCode: 200,
       body: {
         city: "Göteborg",
         temperature: 12,
         description: "rainy",
+        icon: "09d",
       },
-    });
+    }).as("getWeatherGoteborg");
 
     cy.visit("/");
+    cy.wait("@getWeatherGoteborg");
 
     cy.contains("Göteborg");
     cy.contains("12°C");
     cy.contains("rainy");
   });
 
-  it("should be able to change favoritecity", () => {
-    cy.intercept("GET", "/weather?city=Malmö", {
+  it("should remove a favorite city", () => {
+    cy.intercept("GET", "api/weather?city=Malm*", {
       statusCode: 200,
       body: {
         city: "Malmö",
         temperature: 15,
         description: "sunny",
+        icon: "01d",
       },
-    });
+    }).as("getWeatherMalmo");
 
     cy.visit("/");
     cy.get("input[placeholder='Ange stad']").type("Malmö");
     cy.get("button").contains("Sök").click();
-
+    cy.wait("@getWeatherMalmo");
     cy.get("button").contains("Spara som favorit").click();
 
-    cy.getCookie("favoriteCity").should("have.property", "value", "Malmö");
+    cy.getCookie("favoriteCity").then((cookie) => {
+      expect(decodeURIComponent(cookie!.value)).to.eq("Malmö");
+    });
   });
 });
