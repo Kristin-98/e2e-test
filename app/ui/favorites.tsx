@@ -24,7 +24,7 @@ export default function Favorites({ favorites, onRemove }: FavoritesProps) {
             className="bg-white/20 backdrop-blur-xl shadow-lg p-6 rounded-2xl text-center flex flex-col items-center"
             key={fav.city}
           >
-            <h2 className="text-xl mb-2">{fav.city}</h2>
+            <h3 className="text-xl mb-2">{fav.city}</h3>
             <Image
               src={`http://openweathermap.org/img/wn/${fav.icon}@2x.png`}
               alt={fav.description}

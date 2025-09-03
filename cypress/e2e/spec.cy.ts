@@ -85,13 +85,19 @@ describe("todo", () => {
     }).as("getWeatherMalmo");
 
     cy.visit("/");
+
     cy.get("input[placeholder='Ange stad']").type("Malmö");
     cy.get("button").contains("Sök").click();
     cy.wait("@getWeatherMalmo");
+
     cy.get("button").contains("Spara som favorit").click();
 
-    cy.getCookie("favoriteCity").then((cookie) => {
-      expect(decodeURIComponent(cookie!.value)).to.eq("Malmö");
-    });
+    cy.contains("h3", "Malmö")
+      .parents("div")
+      .find("button")
+      .contains("x")
+      .click();
+
+    cy.contains("h3", "Malmö").should("not.exist");
   });
 });
