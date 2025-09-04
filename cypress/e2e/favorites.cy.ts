@@ -13,6 +13,7 @@ describe("Favorites interaction", () => {
     cy.visit("/");
   });
 
+  // Tests for Activity feature
   it("should click on Stockholm favorite, verify weather, and select an activity", () => {
     cy.get('[data-testid="favorite-Stockholm"]').should("exist");
 
@@ -33,5 +34,30 @@ describe("Favorites interaction", () => {
     cy.contains("Löpning").click();
     cy.contains("30 minuter").click();
     cy.contains("Löpning - 30 min").should("exist");
+  });
+
+  it("should select activity and duration correctly", () => {
+    cy.get('[data-testid="favorite-Stockholm"]').click();
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Löpning").click();
+    cy.contains("15 minuter").click();
+    cy.contains("Löpning - 15 min").should("exist");
+  });
+
+  it("should reset selection when Avbryt is clicked", () => {
+    cy.get('[data-testid="favorite-Stockholm"]').click();
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Löpning").click();
+    cy.contains("Avbryt").click();
+    cy.contains("Välj aktivitet >").should("exist");
+  });
+
+  it("should show activities filtered by Soligt weather", () => {
+    cy.get('[data-testid="favorite-Stockholm"]').click();
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Löpning").should("exist");
+    cy.contains("Cykling").should("exist");
+    cy.contains("Gym").should("not.exist");
+    cy.contains("Simning").should("not.exist");
   });
 });
