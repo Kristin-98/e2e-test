@@ -61,3 +61,41 @@ describe("Favorites interaction", () => {
     cy.contains("Simning").should("not.exist");
   });
 });
+
+describe("Favorites interaction - Göteborg", () => {
+  beforeEach(() => {
+    cy.intercept("GET", "/api/weather*G%C3%B6teborg*", {
+      statusCode: 200,
+      body: {
+        city: "Göteborg",
+        temperature: 18,
+        description: "Molnigt",
+        icon: "09d",
+      },
+    }).as("getGoteborgWeather");
+
+    cy.visit("/");
+  });
+
+  it("should click on Göteborg favorite, verify weather, and select an activity", () => {
+    cy.get('[data-testid="favorite-Göteborg"]').should("exist");
+
+    cy.get('[data-testid="favorite-Göteborg"]').within(() => {
+      cy.contains("Göteborg").should("exist");
+      cy.contains("Molnigt").should("exist");
+      cy.contains("18°C").should("exist");
+    });
+
+    cy.get('[data-testid="favorite-Göteborg"]').click();
+    cy.wait("@getGoteborgWeather");
+
+    cy.get("h2").contains("Göteborg").should("exist");
+    cy.contains("Molnigt").should("exist");
+    cy.contains("18°C").should("exist");
+
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Gym").click();
+    cy.contains("45 minuter").click();
+    cy.contains("Gym - 45 min").should("exist");
+  });
+})

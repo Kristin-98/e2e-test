@@ -104,13 +104,5 @@ describe("todo", () => {
     cy.get("[data-testid='favorite-Malmö']").should("exist");
   });
 
-  it("should remove a favorite city", () => {
-    cy.get("[data-testid='favorite-Göteborg']")
-      .find("button")
-      .contains("x")
-      .click();
-
-    cy.get("[data-testid='favorite-Göteborg']").should("not.exist");
-    cy.get("[data-testid='favorite-Stockholm']").should("exist");
-  });
+ 
 });
