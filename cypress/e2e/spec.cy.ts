@@ -115,6 +115,13 @@ describe("todo", () => {
   });
 
   // Tests for Activity feature
+  it("opens and closes dropdown when button is clicked", () => {
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Löpning").should("exist");
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Löpning").should("not.exist");
+  });
+
   it("resets selection when Avbryt is clicked", () => {
     cy.contains("Välj aktivitet >").click();
     cy.contains("Löpning").click();
