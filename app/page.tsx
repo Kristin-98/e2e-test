@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <main>
-      <TodoList defaultTodos={todos} />
+      {/* <TodoList defaultTodos={todos} /> */}
       <WeatherApp />
     </main>
   );

@@ -127,7 +127,7 @@ export default function WeatherApp() {
 
             <button
               onClick={handleSaveFavorite}
-              className="mt-4 px-4 py-2 rounded-lg border-1 border-yellow-400 hover:border-yellow-500"
+              className="m-4 px-4 py-2 rounded-lg border-1 border-yellow-400 hover:border-yellow-500"
             >
               Spara som favorit
             </button>

@@ -1,3 +1,5 @@
+
+// Tests for Activity feature
 describe("Favorites interaction", () => {
   beforeEach(() => {
     cy.intercept("GET", "/api/weather*Stockholm", {
@@ -13,7 +15,6 @@ describe("Favorites interaction", () => {
     cy.visit("/");
   });
 
-  // Tests for Activity feature
   it("should click on Stockholm favorite, verify weather, and select an activity", () => {
     cy.get('[data-testid="favorite-Stockholm"]').should("exist");
 

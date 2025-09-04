@@ -1,23 +1,10 @@
-describe("todo", () => {
+describe("Weather card", () => {
   beforeEach(() => {
     cy.task("reseed");
     cy.clearCookies();
     cy.intercept("GET", "/api/weather*").as("getWeather");
     cy.visit("/");
   });
-  // it("should display three todos by default", () => {
-  //   cy.visit("/");
-  //   cy.get("li").should("have.length", 3);
-  //   cy.get("li").first().should("contain.text", "Feed the cat");
-  //   cy.get("li").last().contains("Walk all the cats");
-  // });
-
-  // it("should be able to delete todo", () => {
-  //   cy.visit("/");
-  //   cy.contains("Feed the cat").parents("li").find("button").click();
-  //   cy.get("li").should("have.length", 2);
-  //   cy.contains("Feed the cat").should("not.exist");
-  // });
 
   it("should display weather when a valid city is searched", () => {
     cy.intercept("GET", "api/weather?city=Stockholm*", {
@@ -59,8 +46,8 @@ describe("todo", () => {
       body: [
         {
           city: "Göteborg",
-          temperature: 12,
-          description: "rainy",
+          temperature: 18,
+          description: "Molnigt",
           icon: "09d",
         },
       ],
@@ -70,8 +57,8 @@ describe("todo", () => {
     cy.wait("@getFavorites");
     cy.get("[data-testid='favorite-Göteborg']").within(() => {
       cy.contains("Göteborg");
-      cy.contains("12°C");
-      cy.contains("rainy");
+      cy.contains("18°C");
+      cy.contains("Molnigt");
     });
   });
 
@@ -103,6 +90,4 @@ describe("todo", () => {
     cy.wait("@postFavorite");
     cy.get("[data-testid='favorite-Malmö']").should("exist");
   });
-
- 
 });
