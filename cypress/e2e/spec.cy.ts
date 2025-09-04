@@ -118,7 +118,7 @@ describe("todo", () => {
   it("shows correct activities for Stockholm (Soligt)", () => {
     cy.visit("/");
 
-    cy.intercept("GET", "/api/favorites", {
+    cy.intercept("GET", "/api/weather?city=Stockholm", {
       statusCode: 200,
       body: [
         {
@@ -128,17 +128,17 @@ describe("todo", () => {
           icon: "01d",
         },
       ],
-    }).as("getFavorites");
+    }).as("getWeather");
 
-    cy.wait("@getFavorites");
-    cy.get("[data-testid='favorite-Stockholm']").click();
+    cy.get("input[placeholder='Ange stad']").type("Stockholm");
+    cy.contains("Sök").click();
+    cy.wait("@getWeather");
+
     cy.contains("Välj aktivitet >").click();
-
     cy.contains("Löpning").should("exist");
     cy.contains("Cykling").should("exist");
     cy.contains("Gym").should("not.exist");
   });
-
 
   it("opens and closes dropdown when button is clicked", () => {
     cy.contains("Välj aktivitet >").click();

@@ -25,18 +25,16 @@ export default function Favorites({ favorites, onRemove }: FavoritesProps) {
             className="bg-white/20 backdrop-blur-xl shadow-lg p-6 rounded-2xl text-center flex flex-col items-center"
             key={fav.city}
           >
-            <a href={`/weather/${fav.city}`}>
-              <h4 className="text-xl mb-2">{fav.city}</h4>
-              <Image
-                src={`http://openweathermap.org/img/wn/${fav.icon}@2x.png`}
-                alt={fav.description}
-                width={80}
-                height={80}
-                className="mx-auto"
-              />
-              <p className="mt-2 text-lg">{fav.temperature}°C</p>
-              <p className="capitalize">{fav.description}</p>
-            </a>
+            <h4 className="text-xl mb-2">{fav.city}</h4>
+            <Image
+              src={`http://openweathermap.org/img/wn/${fav.icon}@2x.png`}
+              alt={fav.description}
+              width={80}
+              height={80}
+              className="mx-auto"
+            />
+            <p className="mt-2 text-lg">{fav.temperature}°C</p>
+            <p className="capitalize">{fav.description}</p>
             {onRemove && (
               <button
                 className="mt-4 px-4 py-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 shadow-md transition"
