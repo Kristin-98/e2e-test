@@ -45,7 +45,7 @@ export default function Favorites({
               <button
                 className="mt-4 px-4 py-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 shadow-md transition"
                 onClick={(e) => {
-                  e.stopPropagation(); // Förhindra att click på "x" triggar onSelect
+                  e.stopPropagation();
                   onRemove(fav.city);
                 }}
               >
