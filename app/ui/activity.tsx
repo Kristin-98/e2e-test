@@ -19,7 +19,7 @@ export default function ActivityDropdown({
 
   const activityOptions: Record<string, string[]> = {
     Soligt: ["Löpning", "Cykling"],
-    Molnigt: ["Gym", "Hemmaträning"],
+    Molnigt: ["Gym", "Hemmaträning", "Löpning", "Cykling"],
     Regnigt: ["Gym", "Hemmaträning", "Simning"],
   };
 

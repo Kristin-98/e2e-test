@@ -52,6 +52,7 @@ describe("todo", () => {
     cy.contains("Kunde inte hitta väder för FakeCity");
   });
 
+  // Tests for Favorite feature
   it("should show weather for favorite city from the database", () => {
     cy.intercept("GET", "/api/favorites", {
       statusCode: 200,
@@ -67,7 +68,6 @@ describe("todo", () => {
 
     cy.visit("/");
     cy.wait("@getFavorites");
-
     cy.get("[data-testid='favorite-Göteborg']").within(() => {
       cy.contains("Göteborg");
       cy.contains("12°C");
@@ -99,7 +99,6 @@ describe("todo", () => {
     cy.get("input[placeholder='Ange stad']").type("Malmö");
     cy.get("button").contains("Sök").click();
     cy.wait("@getWeatherMalmo");
-
     cy.get("button").contains("Spara som favorit").click();
     cy.wait("@postFavorite");
     cy.get("[data-testid='favorite-Malmö']").should("exist");
@@ -113,5 +112,14 @@ describe("todo", () => {
 
     cy.get("[data-testid='favorite-Göteborg']").should("not.exist");
     cy.get("[data-testid='favorite-Stockholm']").should("exist");
+  });
+
+  // Tests for Activity feature
+  it("resets selection when Avbryt is clicked", () => {
+    cy.contains("Välj aktivitet >").click();
+    cy.contains("Löpning").click();
+    cy.contains("Avbryt").click();
+
+    cy.contains("Välj aktivitet >").should("contain.text", "Välj aktivitet >");
   });
 });
