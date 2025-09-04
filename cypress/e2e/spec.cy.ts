@@ -115,6 +115,20 @@ describe("todo", () => {
   });
 
   // Tests for Activity feature
+  it("shows correct activities for Stockholm (Soligt)", () => {
+    cy.visit("/");
+
+    cy.intercept("GET", "/api/favorites").as("getFavorites");
+    cy.wait("@getFavorites");
+
+    cy.get("[data-testid='favorite-Stockholm']").click();
+    cy.contains("Välj aktivitet >").click();
+
+    cy.contains("Löpning").should("exist");
+    cy.contains("Cykling").should("exist");
+    cy.contains("Gym").should("not.exist");
+  });
+
   it("opens and closes dropdown when button is clicked", () => {
     cy.contains("Välj aktivitet >").click();
     cy.contains("Löpning").should("exist");

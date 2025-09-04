@@ -24,25 +24,22 @@ export default function ActivityDropdown({
   };
 
   function getActivitiesForWeather(desc: string) {
-  const d = desc.toLowerCase();
+    const d = desc.toLowerCase();
 
-  if (d.includes("klar") || d.includes("sol")) {
-    return activityOptions.Soligt;
-  } else if (d.includes("moln")) {
-    return activityOptions.Molnigt;
-  } else if (d.includes("regn")) {
-    return activityOptions.Regnigt;
-  } else {
-    return ["Löpning", "Simning", "Cykling", "Gym", "Hemmaträning"];
+    if (d.includes("klar") || d.includes("sol")) {
+      return activityOptions.Soligt;
+    } else if (d.includes("moln")) {
+      return activityOptions.Molnigt;
+    } else if (d.includes("regn")) {
+      return activityOptions.Regnigt;
+    } else {
+      return ["Löpning", "Simning", "Cykling", "Gym", "Hemmaträning"];
+    }
   }
-}
-
-
 
   const activities = weatherDescription
-  ? getActivitiesForWeather(weatherDescription)
-  : ["Löpning", "Simning", "Cykling", "Gym", "Hemmaträning"];
-
+    ? getActivitiesForWeather(weatherDescription)
+    : [];
 
   useEffect(() => {
     if (buttonRef.current) {
@@ -53,6 +50,8 @@ export default function ActivityDropdown({
       });
     }
   }, [isOpen]);
+
+  if (!weatherDescription) return null;
 
   return (
     <div className="relative inline-block">
