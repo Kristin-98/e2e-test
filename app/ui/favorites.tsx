@@ -12,8 +12,13 @@ interface WeatherData {
 interface FavoritesProps {
   favorites: WeatherData[];
   onRemove?: (city: string) => void;
+  onSelect?: (city: string) => void;
 }
-export default function Favorites({ favorites, onRemove }: FavoritesProps) {
+export default function Favorites({
+  favorites,
+  onRemove,
+  onSelect,
+}: FavoritesProps) {
   if (favorites.length === 0) return null;
   return (
     <div className="max-w-5xl mt-6">
@@ -24,6 +29,7 @@ export default function Favorites({ favorites, onRemove }: FavoritesProps) {
             data-testid={`favorite-${fav.city}`}
             className="bg-white/20 backdrop-blur-xl shadow-lg p-6 rounded-2xl text-center flex flex-col items-center"
             key={fav.city}
+            onClick={() => onSelect && onSelect(fav.city)} // NY
           >
             <h4 className="text-xl mb-2">{fav.city}</h4>
             <Image
@@ -38,7 +44,10 @@ export default function Favorites({ favorites, onRemove }: FavoritesProps) {
             {onRemove && (
               <button
                 className="mt-4 px-4 py-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 shadow-md transition"
-                onClick={() => onRemove(fav.city)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Förhindra att click på "x" triggar onSelect
+                  onRemove(fav.city);
+                }}
               >
                 x
               </button>

@@ -138,7 +138,11 @@ export default function WeatherApp() {
         </div>
       </div>
       <div className="mt-6 w-full max-w-md z-10">
-        <Favorites favorites={favorites} onRemove={handleRemoveFavorite} />
+        <Favorites
+          favorites={favorites}
+          onRemove={handleRemoveFavorite}
+          onSelect={fetchWeather}
+        />
       </div>
     </div>
   );
