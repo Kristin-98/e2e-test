@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌤️ Väderapp React
 
-## Getting Started
+## Beskrivning
+Detta är en väderapplikation byggd med Next.js och TypeScript som låter användare:
 
-First, run the development server:
+- Söka efter väder i olika städer.
+- Spara favoritstäder i en databas.
+- Välja aktiviteter baserat på väderförhållanden.
+- Se tidigare sparade favoriter direkt vid sidladdning.
+
+Appen använder ett REST-API för att hämta väderdata och sparade favoriter. MongoDB används som databas för att lagra favoritstäder, och Prisma används som ORM för att kommunicera med databasen. Tailwind används för css.
+
+---
+
+## Bygga projektet
+
+Installera beroenden:
 
 ```bash
+npm install
+# eller
+yarn install
+
+## Bygga projektet för produktion
+npm run build
+# eller
+yarn build
+
+## Starta utvecklingsservern
 npm run dev
-# or
+# eller
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+##Miljövariabler
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+##Skapa en .env-fil i projektets rot och lägg till följande variabler:
+MONGODB_URI=<din_mongodb_connection_string>
+##Prisma kommer att använda detta för att koppla upp mot MongoDB.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##Testa projektet:
+##Projektet använder Cypress för end-to-end tester.
+##Installera Cypress (om inte redan installerat):
 
-## Learn More
+npm install cypress --save-dev
+# eller
+yarn add cypress --dev
 
-To learn more about Next.js, take a look at the following resources:
+##Öppna Cypress testgränssnitt:
+npm run test
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+##Prisma & Databas:
+##Initiera Prisma och skapa databasen:
+npm run push
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+##Kör Prisma Studio för att inspektera databasen:
+npm run studio
