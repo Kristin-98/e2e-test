@@ -11,12 +11,20 @@ interface WeatherData {
   description: string;
   icon: string;
 }
+type WeatherAppProps = {
+  initialFavorites?: Array<{
+    city: string;
+    temperature: number;
+    description: string;
+    icon: string;
+  }>;
+};
 
-export default function WeatherApp() {
+export default function WeatherApp({ initialFavorites = [] }: WeatherAppProps) {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [favorites, setFavorites] = useState<WeatherData[]>([]);
+  const [favorites, setFavorites] = useState<WeatherData[]>(initialFavorites);
 
   async function loadFavorites() {
     try {
