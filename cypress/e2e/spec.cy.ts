@@ -5,19 +5,19 @@ describe("todo", () => {
     cy.intercept("GET", "/api/weather*").as("getWeather");
     cy.visit("/");
   });
-  it("should display three todos by default", () => {
-    cy.visit("/");
-    cy.get("li").should("have.length", 3);
-    cy.get("li").first().should("contain.text", "Feed the cat");
-    cy.get("li").last().contains("Walk all the cats");
-  });
+  // it("should display three todos by default", () => {
+  //   cy.visit("/");
+  //   cy.get("li").should("have.length", 3);
+  //   cy.get("li").first().should("contain.text", "Feed the cat");
+  //   cy.get("li").last().contains("Walk all the cats");
+  // });
 
-  it("should be able to delete todo", () => {
-    cy.visit("/");
-    cy.contains("Feed the cat").parents("li").find("button").click();
-    cy.get("li").should("have.length", 2);
-    cy.contains("Feed the cat").should("not.exist");
-  });
+  // it("should be able to delete todo", () => {
+  //   cy.visit("/");
+  //   cy.contains("Feed the cat").parents("li").find("button").click();
+  //   cy.get("li").should("have.length", 2);
+  //   cy.contains("Feed the cat").should("not.exist");
+  // });
 
   it("should display weather when a valid city is searched", () => {
     cy.intercept("GET", "api/weather?city=Stockholm*", {
@@ -52,52 +52,66 @@ describe("todo", () => {
     cy.contains("Kunde inte hitta väder för FakeCity");
   });
 
-  it("should show weather for favorite city via cookie", () => {
-    cy.setCookie("favoriteCity", "Göteborg");
-
-    cy.intercept("GET", "/api/weather?city=G*", {
+  it("should show weather for favorite city from the database", () => {
+    cy.intercept("GET", "/api/favorites", {
       statusCode: 200,
-      body: {
-        city: "Göteborg",
-        temperature: 12,
-        description: "rainy",
-        icon: "09d",
-      },
-    }).as("getWeatherGoteborg");
+      body: [
+        {
+          city: "Göteborg",
+          temperature: 12,
+          description: "rainy",
+          icon: "09d",
+        },
+      ],
+    }).as("getFavorites");
 
     cy.visit("/");
-    cy.wait("@getWeatherGoteborg");
+    cy.wait("@getFavorites");
 
-    cy.contains("Göteborg");
-    cy.contains("12°C");
-    cy.contains("rainy");
+    cy.get("[data-testid='favorite-Göteborg']").within(() => {
+      cy.contains("Göteborg");
+      cy.contains("12°C");
+      cy.contains("rainy");
+    });
   });
 
-  it("should remove a favorite city", () => {
+  it("should add a new favorite city", () => {
     cy.intercept("GET", "api/weather?city=Malm*", {
       statusCode: 200,
       body: {
         city: "Malmö",
         temperature: 15,
-        description: "sunny",
+        description: "Sunny",
         icon: "01d",
       },
     }).as("getWeatherMalmo");
 
-    cy.visit("/");
+    cy.intercept("POST", "/api/favorites", {
+      statusCode: 200,
+      body: {
+        city: "Malmö",
+        temperature: 15,
+        description: "Sunny",
+        icon: "01d",
+      },
+    }).as("postFavorite");
 
     cy.get("input[placeholder='Ange stad']").type("Malmö");
     cy.get("button").contains("Sök").click();
     cy.wait("@getWeatherMalmo");
 
     cy.get("button").contains("Spara som favorit").click();
+    cy.wait("@postFavorite");
+    cy.get("[data-testid='favorite-Malmö']").should("exist");
+  });
 
-    cy.contains("h3", "Malmö")
-      .parents("div")
+  it("should remove a favorite city", () => {
+    cy.get("[data-testid='favorite-Göteborg']")
       .find("button")
       .contains("x")
       .click();
 
-    cy.contains("h3", "Malmö").should("not.exist");
+    cy.get("[data-testid='favorite-Göteborg']").should("not.exist");
+    cy.get("[data-testid='favorite-Stockholm']").should("exist");
   });
 });

@@ -21,10 +21,11 @@ export default function Favorites({ favorites, onRemove }: FavoritesProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {favorites.map((fav) => (
           <div
+            data-testid={`favorite-${fav.city}`}
             className="bg-white/20 backdrop-blur-xl shadow-lg p-6 rounded-2xl text-center flex flex-col items-center"
             key={fav.city}
           >
-            <h3 className="text-xl mb-2">{fav.city}</h3>
+            <h4 className="text-xl mb-2">{fav.city}</h4>
             <Image
               src={`http://openweathermap.org/img/wn/${fav.icon}@2x.png`}
               alt={fav.description}
